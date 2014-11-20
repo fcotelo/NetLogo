@@ -2,6 +2,7 @@
 
 package org.nlogo.hubnet.client
 
+import org.nlogo.plot.PlotManager
 import org.nlogo.api.{RandomServices,ParserServices}
 import org.nlogo.util.MersenneTwisterFast
 import org.nlogo.window.{ButtonWidget,ChooserWidget,InterfacePanelLite}
@@ -12,7 +13,7 @@ import java.awt.{Font,BorderLayout,Color,Insets}
 
 // The layout for the hubnet client. Holds the interface panel and the message text field.
 class ClientGUI(editorFactory: org.nlogo.window.EditorFactory,clientView: ClientView,
-                parser: ParserServices) extends JPanel {
+                plotManager: PlotManager, parser: ParserServices) extends JPanel {
 
   private val statusPanel = new StatusPanel()
   private val messagePanel = new MessagePanel(new JTextArea(4,3))
