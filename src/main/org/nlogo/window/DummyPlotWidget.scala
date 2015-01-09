@@ -20,7 +20,7 @@ object DummyPlotWidget{
 class DummyPlotWidget(plot:Plot, plotManager: PlotManager) extends AbstractPlotWidget(plot, plotManager) {
   var nameOptions = createNameOptions()
 
-  override def load(strings: Array[String], helper: Widget.LoadHelper): Object = {
+  override def load(strings: Seq[String], helper: Widget.LoadHelper): Object = {
     super.load(strings, helper)
     nameOptions = createNameOptions()
     if (nameOptions.names.contains(plot.name)) {
@@ -46,13 +46,13 @@ class DummyPlotWidget(plot:Plot, plotManager: PlotManager) extends AbstractPlotW
   }
 
   override def savePens(s: StringBuilder): Unit = {
-    var p: Plot = plotManager.getPlot(plot.name)
-    for(pen <- p.pens){
-      if (!pen.temporary) {
-        s.append("\"" + org.nlogo.api.StringUtils.escapeString(pen.name) + "\" " +
-                pen.defaultInterval + " " + pen.defaultMode + " " + pen.defaultColor + " " + pen.inLegend + "\n")
-      }
-    }
+    plotManager.getPlot(plot.name).foreach(p =>
+      for(pen <- p.pens){
+        if (!pen.temporary) {
+          s.append("\"" + org.nlogo.api.StringUtils.escapeString(pen.name) + "\" " +
+                  pen.defaultState.interval + " " + pen.defaultState.mode + " " + pen.defaultState.color + " " + pen.inLegend + "\n")
+        }
+      })
   }
 
   override def propertySet = {

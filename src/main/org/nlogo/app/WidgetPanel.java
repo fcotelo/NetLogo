@@ -420,7 +420,7 @@ public strictfp class WidgetPanel
       // the current plots so the user can select one. We override
       // this method in InterfacePanel since regular plots are handled
       // differently ev 1/25/07
-      String[] names = workspace.plotManager().getPlotNames();
+      String[] names = (String[])workspace.plotManager().getPlotNames().toArray(scala.reflect.ClassTag$.MODULE$.apply(String.class));
       if (names.length > 0) {
         return DummyPlotWidget.apply(names[0], workspace.plotManager());
       } else {
