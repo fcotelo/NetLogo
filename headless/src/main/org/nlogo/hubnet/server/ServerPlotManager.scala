@@ -60,6 +60,7 @@ class ServerPlotManager(workspace: AbstractWorkspaceScala, connectionManager: Co
     action match {
       case PlotY(plotName, penName, y) => {
         val x = plots.find(_.name.equalsIgnoreCase(plotName)).flatMap(_.getPen(penName)).get.state.x
+        broadcastToClients(penName, plotName)
         broadcastToClients(new HubNetPlotPoint(x, y), plotName)
       }
       case ClearPlot(plotName) => {}
