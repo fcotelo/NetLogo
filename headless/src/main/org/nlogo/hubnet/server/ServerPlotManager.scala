@@ -63,18 +63,37 @@ class ServerPlotManager(workspace: AbstractWorkspaceScala, connectionManager: Co
         broadcastToClients(penName, plotName)
         broadcastToClients(new HubNetPlotPoint(x, y), plotName)
       }
-      case ClearPlot(plotName) => {}
-      case PlotXY(plotName, penName, x, y) => {}
-      case AutoPlot(plotName, on) => {}
-      case SetRange(plotName, isX, min, max) => {}
-      case PenDown(plotName, penName, down) => {}
-      case HidePen(plotName, penName, hidden) => {}
-      case HardResetPen(plotName, penName) => {}
-      case SoftResetPen(plotName, penName) => {}
-      case SetPenInterval(plotName, penName, interval) => {}
-      case SetPenMode(plotName, penName, mode) => {}
-      case SetPenColor(plotName, penName, color) => {}
-      case CreateTemporaryPen(plotName, penName) => {}
+      case ClearPlot(plotName) => { broadcastToClients('c', plotName) }
+      case PlotXY(plotName, penName, x, y) => {
+        broadcastToClients(new HubNetPlotPoint(x, y), plotName)
+      }
+      case AutoPlot(plotName, on) => { throw new RuntimeException("AutoPlot") }
+      case SetRange(plotName, isX, min, max) => {
+        if(isX) {
+          broadcastToClients(List('x', min, max), plotName)
+        } else {
+          broadcastToClients(List('y', min, max), plotName)
+        }
+      }
+      case PenDown(plotName, penName, down) => { throw new RuntimeException("PenDown") }
+      case HidePen(plotName, penName, hidden) => { throw new RuntimeException("HidePen") }
+      case HardResetPen(plotName, penName) => {
+        broadcastToClients(penName, plotName)
+        broadcastToClients('r', plotName)
+      }
+      case SoftResetPen(plotName, penName) => {
+        broadcastToClients(penName, plotName)
+        broadcastToClients('p', plotName)
+      }
+      case SetPenInterval(plotName, penName, interval) => { throw new RuntimeException("SetPenInterval") }
+      case SetPenMode(plotName, penName, mode) => { throw new RuntimeException("SetPenMode") }
+      case SetPenColor(plotName, penName, color) => {
+        broadcastToClients(penName, plotName)
+        broadcastToClients(color, plotName)
+      }
+      case CreateTemporaryPen(plotName, penName) => {
+        // We swallow this case since if the pen isn't there on the client, it just makes it  FD 1/21/2015
+      }
 
     }
   }
